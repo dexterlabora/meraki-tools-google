@@ -1,3 +1,3 @@
 # meraki-tools-google
 
-![screenshot](/images/screenshot 640x400.png)
+![screenshot](./images/screenshot 640x400.png)
