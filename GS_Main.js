@@ -165,6 +165,7 @@ function loadMenu() {
         "callDeviceLossAndLatencyHistory"
       )
       .addItem("Sense Overview", "callCameraSenseOverview")
+      .addItem("SSIDs", "callSsids")
       .addItem("Wireless Health Failed Connections", "callFailedConnections")
       .addItem(
         "Wireless Health Connection Stats by Device",

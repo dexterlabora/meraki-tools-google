@@ -225,3 +225,17 @@ function claimOrder(apiKey, orgId, data) {
   var json = JSON.parse(data);
   return json; 
 }
+
+function updateSsid(apiKey, netId, number, data) {
+  var options = {
+     'method' : 'put',
+     'payload' : data,
+     'headers':{
+       'X-Cisco-Meraki-API-Key': apiKey
+     }
+  };
+  var response = UrlFetchApp.fetch("https://mp.meraki.com/api/v0/networks/"+netId+"/ssids/"+number, options);
+  var data = response.getContentText();
+  var json = JSON.parse(data);
+  return json; 
+}

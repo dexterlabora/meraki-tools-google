@@ -34,7 +34,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 
-    <!-- Include Vue Components -->
+    <!-- Include Vue Components via HTML-->
 
     <?!= include('page-home'); ?> 
     <?!= include('page-apikey'); ?> 
@@ -42,31 +42,53 @@
     <?!= include('page-tools'); ?> 
     <?!= include('tool-provision-client'); ?> 
     <?!= include('tool-claim-order'); ?>
+    <?!= include('tool-configure-ssid'); ?> 
     <?!= include('nav-orgnet'); ?> 
     <?!= include('nav-menu'); ?> 
     <?!= include('store'); ?>
 
+<script>
+       
+
+       
+</script>
+
     <!-- Navigation Routes -->
     <script>
+/*
+       const Home = google.script.run.withSuccessHandler(res => res).include('page-home');  
+       const ApiKey = google.script.run.withSuccessHandler(res => res).include('page-apikey');  
+       const Reports = google.script.run.withSuccessHandler(res => res).include('page-reports');  
+       const Tools = google.script.run.withSuccessHandler(res => res).include('page-tools');  
+       const ProvisionClient = google.script.run.withSuccessHandler(res => res).include('tool-provision-client');  
+       const ClaimOrder = google.script.run.withSuccessHandler(res => res).include('tool-claim-order'); 
+       const ConfigureSsid = google.script.run.withSuccessHandler(res => res).include('tool-configure-ssid');  
+       const OrgNet = google.script.run.withSuccessHandler(res => res).include('nav-orgnet');  
+       const NavMenu = google.script.run.withSuccessHandler(res => res).include('nav-menu');  
+       const Store = google.script.run.withSuccessHandler(res => res).include('store'); 
+*/
+
       const routes = [
         { path: "/home", component: Home },
         { path: "/apikey", component: ApiKey },
         { path: "/reports", component: Reports },
         { path: "/tools", component: Tools },
         { path: "/provision-client", component: ProvisionClient },
-        { path: "/claim-order", component: ClaimOrder }
+        { path: "/claim-order", component: ClaimOrder },
+        { path: "/configure-ssid", component: ConfigureSsid }
       ];
 
-      const router = new VueRouter({
+      const Router = new VueRouter({
         routes
       });
 
       var app = new Vue({
-        router: router,
-        store: store,
+        router: Router,
+        store: Store,
         el: "#app",
         components: {
-          OrgNet
+          'org-net': OrgNet,
+          'nav-menu': NavMenu
         },
         mounted: function() {
           this.$router.push("/home");

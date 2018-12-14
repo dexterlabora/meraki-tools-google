@@ -110,6 +110,26 @@ function callDevices(){
   displayJSON(data,keys);
 }
 
+function callSsids(){
+  var data = []; 
+  var keys = [];
+  var result = getSsids(settings.apiKey, settings.netId);
+  
+  if(!Array.isArray(result)){return}   
+  result.forEach(function(obj){ 
+    var flat = flattenObject(obj);
+    data.push(flat);
+    
+    // set keys
+    Object.keys(flat).forEach(function(value){
+      if (keys.indexOf(value)==-1) keys.push(value);
+    });
+  });
+	
+displayJSON(data,keys);
+ 
+}
+
 function callDeviceLossAndLatencyHistory(){
   var data = [];
   var keys = [];

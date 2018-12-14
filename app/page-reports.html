@@ -8,7 +8,7 @@
           </v-card-title>
           <v-card-text p1>
             <v-flex xs12 md12 pt-4>
-              <v-text-field label="Timespan" v-model="form.timespan" @change="updateTimespan"></v-text-field>
+              <!--v-text-field label="Timespan" v-model="form.timespan" @change="updateTimespan"></v-text-field-->
               <p>Select a Sheet cell, then select a report to run.</p>
               
               <v-list>
@@ -48,6 +48,10 @@ const Reports = Vue.component('reports', {
             method: this.reportNetworks
           },
           {
+            title: "SSIDs",
+            method: this.reportSsids
+          },
+          {
             title: "Clients",
             method: this.reportClients
           },
@@ -70,6 +74,9 @@ const Reports = Vue.component('reports', {
       },
       reportDevices: function() {
         google.script.run.callDevices();
+      },
+      reportSsids: function() {
+        google.script.run.callSsids();
       },
       updateTimespan: function() {
         this.$store.commit("setTimespan", this.form.timespan);
