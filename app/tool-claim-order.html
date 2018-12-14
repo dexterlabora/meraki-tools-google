@@ -1,0 +1,88 @@
+<template id="claim-order">
+  <v-container>
+    <v-layout>
+      <v-flex xs12 md12>
+        <v-card>
+          <v-card-title>
+            <h3>Claim an Order</h3>
+            <i>in organization: {{ org.name }}</i>
+          </v-card-title>
+          <v-card-text p1>
+            <v-flex xs12 md12 pt-4>
+              <v-select
+                v-model="form.type"
+                :items="typeOptions"
+                item-value="value"
+                label="Type"
+                persistent-hint
+                return-object
+                single-line
+              ></v-select>
+              <v-text-field
+                v-model="form.value"
+                label="Order/Serial/License"
+              ></v-text-field>
+
+              <v-btn color="success" right round @click="onClaim"
+                ><v-icon>add</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex xs12 md12 pt-4>
+              payload: {{ payload }} orderClaimed: {{ orderClaimed }}
+            </v-flex>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</template>
+
+<script>
+  const ClaimOrder = Vue.component("claim-order", {
+    template: "#claim-order",
+    data() {
+      return {
+        orderClaimed: "",
+        typeOptions: [
+          { text: "Order", value: "order" },
+          { text: "Serial", value: "serial" },
+          { text: "License Key", value: "licenseKey" }
+        ],
+        form: {
+          value: "",
+          type: ""
+        },
+        payload: {}
+      };
+    },
+    computed: {
+      apiKey: function() {
+        return this.$store.state.apiKey;
+      },
+      org: function() {
+        return this.$store.state.org;
+      }
+    },
+    methods: {
+      onClaim() {
+        this.payload[this.form.type] = this.form.value;
+        if (this.form.type == "licenseKey") {
+          this.payload.licenseMode = this.payload.licenseMode;
+        }
+
+        google.script.run
+          .withSuccessHandler(this.onSuccess)
+          .withFailureHandler(this.onSuccess)
+          .claimOrder(this.apiKey, this.org.id, this.payload);
+      },
+      onSuccess(res) {
+        this.orderClaimed = res;
+        console.log("order claimed ", res);
+      },
+      onFailure(error) {
+        this.orderClaimed = res; // add better handler
+        console.log("Error: order not claimed ", error);
+      }
+    }
+  });
+</script>

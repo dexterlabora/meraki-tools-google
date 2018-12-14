@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+    />
+  </head>
+
+  <body>
+    <div id="app">
+      <v-app>
+        <v-content>
+          <v-container>
+            <nav-menu></nav-menu>
+            <org-net></org-net>
+            <router-view></router-view>
+          </v-container>
+        </v-content>
+      </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+    <!-- Include Vue Components -->
+
+    <?!= include('page-home'); ?> 
+    <?!= include('page-apikey'); ?> 
+    <?!= include('page-reports'); ?> 
+    <?!= include('page-tools'); ?> 
+    <?!= include('tool-provision-client'); ?> 
+    <?!= include('tool-claim-order'); ?>
+    <?!= include('nav-orgnet'); ?> 
+    <?!= include('nav-menu'); ?> 
+    <?!= include('store'); ?>
+
+    <!-- Navigation Routes -->
+    <script>
+      const routes = [
+        { path: "/home", component: Home },
+        { path: "/apikey", component: ApiKey },
+        { path: "/reports", component: Reports },
+        { path: "/tools", component: Tools },
+        { path: "/provision-client", component: ProvisionClient },
+        { path: "/claim-order", component: ClaimOrder }
+      ];
+
+      const router = new VueRouter({
+        routes
+      });
+
+      var app = new Vue({
+        router: router,
+        store: store,
+        el: "#app",
+        components: {
+          OrgNet
+        },
+        mounted: function() {
+          this.$router.push("/home");
+        }
+      });
+    </script>
+  </body>
+</html>

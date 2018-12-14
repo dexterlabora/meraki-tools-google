@@ -1,0 +1,79 @@
+<template id="reports">
+  <v-container>
+    <v-layout>
+      <v-flex xs12 md12>
+        <v-card>
+          <v-card-title>
+            <h3>Reports</h3>
+          </v-card-title>
+          <v-card-text p1>
+            <v-flex xs12 md12 pt-4>
+              <v-text-field label="Timespan" v-model="form.timespan" @change="updateTimespan"></v-text-field>
+              <p>Select a Sheet cell, then select a report to run.</p>
+              
+              <v-list>
+              <v-list-tile v-for="(report, i) in reports" :key="i" @click="report.method">
+              <v-list-tile-title v-text="report.title"></v-list-tile-title>
+              <v-list-tile-action>
+              <!-- v-icon v-text="report.icon"></v-icon -->
+              </v-list-tile-action>
+              
+              </v-list-tile>
+              </v-list>
+ 
+            </v-flex>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</template>
+
+<script>
+  
+const Reports = Vue.component('reports', {
+  template: '#reports',
+  data() {
+    return {
+     form: {
+       timespan: "7200",
+     },
+     reports: [
+          {
+            title: "Organizations",
+            method: this.reportOrgs
+          },
+          {
+            title: "Networks",
+            method: this.reportNetworks
+          },
+          {
+            title: "Clients",
+            method: this.reportClients
+          },
+          {
+            title: "Devices",
+            method: this.reportDevices
+          },
+        ]
+    };
+  },
+  methods: {
+      reportOrgs: function() {
+        google.script.run.callOrgs();
+      },
+      reportNetworks: function() {
+        google.script.run.callNetworks();
+      },
+      reportClients: function() {
+        google.script.run.callClientsOfNet();
+      },
+      reportDevices: function() {
+        google.script.run.callDevices();
+      },
+      updateTimespan: function() {
+        this.$store.commit("setTimespan", this.form.timespan);
+      }
+   }
+  });
+</script>

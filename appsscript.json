@@ -1,0 +1,19 @@
+{
+  "timeZone": "Europe/Paris",
+  "dependencies": {
+  },
+  "webapp": {
+    "access": "MYSELF",
+    "executeAs": "USER_DEPLOYING"
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "executionApi": {
+    "access": "ANYONE"
+  },
+  "sheets": {
+    "macros": [{
+      "menuName": "Device Uplink Details",
+      "functionName": "DeviceUplinkDetails"
+    }]
+  }
+}

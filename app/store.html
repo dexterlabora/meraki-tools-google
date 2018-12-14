@@ -1,0 +1,48 @@
+<script src="https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.min.js"></script>
+<script>
+// *****
+// Central State Mangement
+// In addition to storing the state of the UI, the Google Scripts will use the environment variables as stored.
+// *****
+const store = new Vuex.Store({
+  state: {
+    org: {},
+    orgs: [],
+    net: {},
+    nets: [],
+    clients: [],
+    apiKey: "",
+    timespan: "",
+    adminMode: false,
+    loading: false
+  },
+  mutations: {
+    setOrg(state, payload){
+      state.org = payload;
+      // store in GS file for server side scripts
+      google.script.run.setOrgId(payload.id);
+    },
+    setOrgs: (state, payload) => (state.orgs = payload),
+    setNet(state, payload){
+      state.net = payload;
+      // store in GS file for server side scripts
+      google.script.run.setNetId(payload.id);
+    },
+    setNets: (state, payload) => (state.nets = payload),
+    setClients: (state, payload) => (state.clients = payload),
+    setApiKey(state, payload){
+      state.apiKey = payload;
+      // store in GS file for server side scripts
+      google.script.run.setApiKey(payload);
+    },
+    setTimespan(state, payload){
+      state.timespan = payload;
+      // store in GS file for server side scripts
+      google.script.run.setTimespan(payload);
+    },
+    setAdminMode: (state, payload) => (state.adminMode = payload),
+    setLoading: (state, payload) => (state.loading = payload)
+  },
+  plugins: []
+});
+</script>
