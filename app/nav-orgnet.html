@@ -1,4 +1,4 @@
-<template id="org-net">
+<template id="nav-org-net">
   <v-layout row wrap>
     <v-flex xs12 sm6 md3 pt-2>
       <v-select
@@ -28,8 +28,8 @@
 </template>
 
 <script>
-  const OrgNet = Vue.component("org-net", {
-    template: "#org-net",
+  const NavOrgNet = Vue.component("nav-org-net", {
+    template: "#nav-org-net",
     data() {
       return {
         authMenu: true,
@@ -62,6 +62,8 @@
           id: "",
           name: ""
         };
+        //this.orgs = this.$meraki.getOrgs(this.apiKey);
+
         google.script.run
           .withSuccessHandler(res => (this.orgs = res))
           .getOrgs(this.apiKey);

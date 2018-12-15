@@ -1,0 +1,213 @@
+<template id="tool-configure-vlan">
+  <v-container>
+    <v-layout row>
+      <v-btn fab fixed bottom right dark color="orange" @click="updateVlan()">
+        <v-icon dark>check</v-icon>
+      </v-btn>
+      <v-flex xs12 sm6>
+        <v-card>
+          <v-list two-line subheader>
+            <v-subheader>Update a VLAN</v-subheader>
+            <v-list-tile avatar>
+              <v-list-tile-content>
+                <v-select
+                  v-bind:items="vlans"
+                  item-text="name"
+                  item-value="id"
+                  return-object
+                  v-model="vlan"
+                  label="vlan"
+                ></v-select>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+
+          <v-list two-line subheader>
+            <v-subheader>Settings</v-subheader>
+
+            <v-list-tile avatar>
+              <v-list-tile-content>
+                <v-text-field
+                  v-model="vlanForm.id"
+                  label="ID"
+                  disabled
+                ></v-text-field>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile avatar>
+              <v-list-tile-content>
+                <v-text-field
+                  v-model="vlanForm.name"
+                  label="Name"
+                ></v-text-field>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile avatar>
+              <v-list-tile-content>
+                <v-text-field
+                  v-model="vlanForm.subnet"
+                  label="Subnet"
+                ></v-text-field>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile avatar>
+              <v-list-tile-content>
+                <v-text-field
+                  v-model="vlanForm.applianceIp"
+                  label="Appliance IP"
+                ></v-text-field>
+              </v-list-tile-content>
+            </v-list-tile>
+            <!--
+              TO DO - break out object options
+              <v-list-tile-content>
+                  <v-text-field
+                    v-model="vlanForm.fixedIpAssignments"
+                    label="Fixed IP Assignments"
+
+                  ></v-text-field>
+                </v-list-tile-content>
+              </v-list-tile>
+
+              <v-list-tile-content>
+                  <v-text-field
+                    v-model="vlanForm.reservedIpRanges"
+                    label="Reserved IP Ranges"
+
+                  ></v-text-field>
+                </v-list-tile-content>
+              </v-list-tile>
+            -->
+            <v-list-tile avatar>
+              <v-list-tile-content>
+                <v-text-field
+                  v-model="vlanForm.vpnNatSubnet"
+                  label="VPN NAT Subnet"
+                ></v-text-field>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile avatar>
+              <v-list-tile-content>
+                <v-select
+                  v-bind:items="vlanOptions.dnsNameservers"
+                  return-object
+                  v-model="vlanForm.dnsNameservers"
+                  label="DNS Nameservers"
+                ></v-select>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</template>
+
+<script>
+  const ToolConfigureVlan = Vue.component("tool-configure-vlan", {
+    template: "#tool-configure-vlan",
+    data() {
+      return {
+        vlanId: 0,
+        vlan: {},
+        vlans: [],
+        vlanForm: [],
+        vlanOptions: {
+          /*
+            name: "",
+            subnet: "",
+            applianceIp: "",
+            fixedIpAssignment:"",
+            reservedIpRanges:"",
+            vpnNatSubnet:"",
+            */
+          dnsNameservers: [
+            "upstream_dns",
+            "upstream_dns",
+            "google_dns",
+            "open_dns"
+          ] // add custom IP addresses and domain names
+        }
+      };
+    },
+
+    computed: {
+      apiKey: function() {
+        return this.$store.state.apiKey;
+      },
+      net: function() {
+        return this.$store.state.net;
+      },
+      adminMode: function() {
+        return true; //this.$store.state.adminMode;
+      }
+    },
+    watch: {
+      net: function() {
+        this.fetchVlans();
+      },
+      vlan: function() {
+        //copy the vlan into the form
+        this.vlanForm = Object.assign({}, this.vlan);
+      },
+      vlanForm: function(change) {
+        console.log("vlanForm changes: ", change);
+      }
+    },
+    created: function() {
+      this.fetchVlans();
+    },
+    methods: {
+      fetchVlans: function() {
+        this.vlans = [];
+        this.vlan = {};
+        if (!this.net) {
+          return;
+        }
+        google.script.run
+          .withSuccessHandler(res => {
+            this.vlans = res;
+            //console.log("fetchVlans vlans: ", this.vlans);
+            if (!this.vlanId) {
+              this.vlan = this.vlans[0];
+            } else {
+              this.vlan = this.vlans.filter(obj => obj.id == this.vlanId)[0];
+            }
+          })
+          .withFailureHandler(err => {
+            console.log("Error fetchvlans : ", err);
+          })
+          .getVlans(this.apiKey, this.net.id);
+      },
+      updateVlan: function($index) {
+        //console.log("updating vlan ", this.vlan);
+        //console.log("vlanForm ", this.vlanForm);
+
+        this.vlanId = this.vlanForm.id; // save vlan ID for use after refresh
+
+        var data = this.vlanForm;
+        delete data.id; //not required in body
+        delete data.fixedIpAssignments; // debugging
+        delete reservedIpRanges; // debugging
+
+        console.log("data: ", data);
+        google.script.run
+          .withSuccessHandler(this.onSuccess)
+          .withFailureHandler(this.onSuccess)
+          .updateVlan(this.apiKey, this.net.id, this.vlan.id, data);
+      },
+      onSuccess(res) {
+        this.fetchVlans(); // get clean copy of vlan list and update form
+        console.log("VLAN updated!", res);
+      },
+      onFailure(error) {
+        // add better handler
+        console.log("Error: VLAN not updated ", error);
+      }
+    }
+  });
+</script>

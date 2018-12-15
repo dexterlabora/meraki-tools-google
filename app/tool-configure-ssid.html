@@ -1,4 +1,4 @@
-<template id="configure-ssid">
+<template id="tool-configure-ssid">
   <v-container>
     <v-layout row>
       <v-btn fab fixed bottom right dark color="orange" @click="updateSsid()">
@@ -159,8 +159,8 @@
 </template>
 
 <script>
-  const ConfigureSsid = Vue.component("configure-ssid", {
-      template: "#configure-ssid",
+  const ToolConfigureSsid = Vue.component("tool-configure-ssid", {
+      template: "#tool-configure-ssid",
       data() {
         return {
           ssidNum: 0,

@@ -1,4 +1,4 @@
-<template id="tools">
+<template id="page-tools">
   <v-container>
     <v-layout>
       <v-flex xs12 md12>
@@ -27,8 +27,8 @@
 </template>
 
 <script>
-  const Tools = Vue.component("tools", {
-    template: "#tools",
+  const PageTools = Vue.component("page-tools", {
+    template: "#page-tools",
     data() {
       return {
         tools: [
@@ -42,7 +42,7 @@
           },
           {
             title: "Update VLANs",
-            path: "add"
+            path: "/configure-vlan"
           },
           {
             title: "Claim Order",

@@ -69,6 +69,10 @@ function include(filename) {
   return HtmlService.createHtmlOutputFromFile("app/" + filename).getContent();
 }
 
+function getRawContent(filename) {
+  return HtmlService.getRawContent(filename).getContent();
+}
+
 // ----
 // Global Environment Variables - used by GS files
 // ----
@@ -166,6 +170,7 @@ function loadMenu() {
       )
       .addItem("Sense Overview", "callCameraSenseOverview")
       .addItem("SSIDs", "callSsids")
+      .addItem("VLANs", "callVlans")
       .addItem("Wireless Health Failed Connections", "callFailedConnections")
       .addItem(
         "Wireless Health Connection Stats by Device",
